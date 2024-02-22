@@ -59,11 +59,11 @@ function App() {
 }
 
 function Header() {
-    const style = {
-        color: 'red',
-        fontSize: '48px',
-        textTransform: 'uppercase'
-    }
+    // const style = {
+    //     color: 'red',
+    //     fontSize: '48px',
+    //     textTransform: 'uppercase'
+    // }
 
     return (
         <header className="header">
@@ -82,19 +82,25 @@ function Menu() {
             <h2>Our menu</h2>
 
             {numPizzas > 0 ? (
-                <ul className="pizzas">
-                    {pizzas.map(pizza => {
-                        return (
-                            <Pizza
-                                name={pizza.name}
-                                ingredients={pizza.ingredients}
-                                price={pizza.price}
-                                photoName={pizza.photoName}
-                                soldOut={pizza.soldOut}
-                                key={pizza.name}
-                            />)
-                    })}
-                </ul>
+                <>
+                    <p>
+                        Authentic Italian cuisine. 6 creative dishes to choose from. All from our stone oven, all
+                        organic, all delicious.
+                    </p>
+                    <ul className="pizzas">
+                        {pizzas.map(pizza => {
+                            return (
+                                <Pizza
+                                    name={pizza.name}
+                                    ingredients={pizza.ingredients}
+                                    price={pizza.price}
+                                    photoName={pizza.photoName}
+                                    soldOut={pizza.soldOut}
+                                    key={pizza.name}
+                                />)
+                        })}
+                    </ul>
+                </>
             ) : (
                 <p>We're still working on our menu. Please come back later ;)</p>
             )}
@@ -102,14 +108,17 @@ function Menu() {
     )
 }
 
-function Pizza({name, ingredients, photoName, price}) {
+function Pizza({name, ingredients, photoName, price, soldOut}) {
+
+    // if (soldOut) return null;
+
     return (
-        <li className="pizza">
+        <li className={`pizza ${soldOut ? "sold-out" : ""}`}>
             <img src={photoName} alt={name}/>
             <div>
                 <h3>{name}</h3>
                 <p>{ingredients}</p>
-                <span>{price}</span>
+                <span>{soldOut ? 'SOLD OUT' : price}</span>
             </div>
         </li>
     )
@@ -121,15 +130,11 @@ function Footer() {
     const closeHour = 22;
 
     const isOpen = hour >= openHour && hour <= closeHour;
-    console.log(isOpen)
 
     return (
         <footer className="footer">
             {isOpen ? (
-                <div className="order">
-                    <p>We're open untill {closeHour}:00. Come visit us or order online.</p>
-                    <button className="btn">Order</button>
-                </div>
+                <Order closeHour={closeHour}/>
                 ) : <p>We're happy to welcome you between {openHour}:00 and {closeHour}:00.</p>
             }
         </footer>
@@ -137,6 +142,14 @@ function Footer() {
     // return React.createElement('footer', null, 'We are currently open!')
 }
 
+function Order({closeHour}) {
+    return (
+        <div className="order">
+            <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+            <button className="btn">Order</button>
+        </div>
+    )
+}
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
